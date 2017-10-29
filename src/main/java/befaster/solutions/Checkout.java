@@ -20,9 +20,14 @@ public class Checkout {
 	}*/
 	
 	static String validProducts = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
-	static int productPrices[] = {
+	/*static int productPrices[] = {
 									50,30,20,15,40,10,20,10,35,60,80,90,15,40,10,50,30,50,30,20,40,50,20,90,10,50
-								};
+								};*/
+	
+	// ROUND 5 PRICES
+	static int productPrices[] = {
+			50,30,20,15,40,10,20,10,35,60,70,90,15,40,10,50,30,50,20,20,40,50,20,17,20,21
+		};
 	
 	public static int checkout(String sku)
 	{
@@ -53,14 +58,17 @@ public class Checkout {
 		markProductFreePromotion(productCounts, 'R', 'Q', 3);
 		markProductFreePromotion(productCounts, 'U', 'U', 3+1);
 		
+		totalPrice += calcPriceForBuyAny3Promotion(sku, productCounts, "STXYZ", 3, 45);
+		
 		totalPrice += calcPriceForPromotion(productCounts, 'A', 5, 200);
 		totalPrice += calcPriceForPromotion(productCounts, 'A', 3, 130);
+		
 		totalPrice += calcPriceForPromotion(productCounts, 'B', 2, 45);
 		totalPrice += calcPriceForPromotion(productCounts, 'P', 5, 200);
-		totalPrice += calcPriceForPromotion(productCounts, 'Q', 3, 80);
 		totalPrice += calcPriceForPromotion(productCounts, 'H', 10, 80);
 		totalPrice += calcPriceForPromotion(productCounts, 'H', 5, 45);
-		totalPrice += calcPriceForPromotion(productCounts, 'K', 2, 150);
+		totalPrice += calcPriceForPromotion(productCounts, 'K', 2, 120);
+		totalPrice += calcPriceForPromotion(productCounts, 'Q', 3, 80);
 		totalPrice += calcPriceForPromotion(productCounts, 'V', 3, 130);
 		totalPrice += calcPriceForPromotion(productCounts, 'V', 2, 90);
 		
@@ -68,6 +76,42 @@ public class Checkout {
 
 		
 		return totalPrice;
+	}
+	
+	static String productsInOfferCheapestToExpensive = "ZSTYX"; 
+
+	private static int calcPriceForBuyAny3Promotion(String sku, int[] productCounts, String productsInOffer, int pCount, int amount) {
+		String sortedPromotionProductDesc = "";
+		
+		for(char product : productsInOfferCheapestToExpensive.toCharArray())
+		{
+			int count = sku.length() - sku.replace(product+"", "").length();
+			char[] chars = new char[count];
+			Arrays.fill(chars, product);
+			String s = new String(chars);
+			sortedPromotionProductDesc += s;
+		}
+		
+		int sum = 0;
+		
+		if(sortedPromotionProductDesc.isEmpty())
+			return sum;
+		
+		for(int round = 1; round <= (sortedPromotionProductDesc.length() / pCount); round++)
+		{
+			sum += amount;
+			char product1 = sortedPromotionProductDesc.charAt((round-1) * pCount);
+			char product2 = sortedPromotionProductDesc.charAt((round-1) * pCount+1);
+			char product3 = sortedPromotionProductDesc.charAt((round-1) * pCount+2);
+			int indexOfProduct1 = validProducts.indexOf(product1);
+			int indexOfProduct2 = validProducts.indexOf(product2);
+			int indexOfProduct3 = validProducts.indexOf(product3);
+			productCounts[indexOfProduct1] = productCounts[indexOfProduct1] - 1;
+			productCounts[indexOfProduct2] = productCounts[indexOfProduct2] - 1; 
+			productCounts[indexOfProduct3] = productCounts[indexOfProduct3] - 1; 
+		}
+		
+		return sum;
 	}
 
 	private static void markProductFreePromotion(int productCounts[], char srcP, char destP, int srcPCount) {
