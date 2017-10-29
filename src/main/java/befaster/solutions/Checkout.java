@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 
 public class Checkout {
 	
-	static String validProducts = "ABCDE";
+	static String validProducts = "ABCDEF";
 	
 	public static int checkout(String sku)
 	{
@@ -31,7 +31,7 @@ public class Checkout {
 		
 		for(char product : sku.toCharArray())
 		{
-			productCounts[validProducts.indexOf(product)] = productCounts[validProducts	.indexOf(product)]+1; 
+			productCounts[validProducts.indexOf(product)] = productCounts[validProducts	.indexOf(product)] + 1; 
 		}
 		
 		int promotional5CountForA = productCounts[0] / 5;
@@ -40,10 +40,14 @@ public class Checkout {
 		int promotional3CountForA = nonPromotional5CountForA / 3;
 		int nonPromotional3CountForA = nonPromotional5CountForA % 3;
 		
-		int noOfFreeBs = productCounts[4]/2;
-		
 		// give free Bs from E promotion
+		int noOfFreeBs = productCounts[4] / 2;
 		productCounts[1] = productCounts[1] - noOfFreeBs < 0 ? 0 : productCounts[1] - noOfFreeBs;
+		
+		
+		// give free Fs from F promotion
+		int noOfFreeFs = productCounts[5] / 3;	
+		productCounts[5] = productCounts[5] - noOfFreeFs < 0 ? 0 : productCounts[5] - noOfFreeFs;
 		
 		int promotionalCountForB = productCounts[1] / 2;
 		int nonPromotionalCountForB = productCounts[1] % 2;
@@ -51,6 +55,7 @@ public class Checkout {
 		sum = (productCounts[2] * 20)+ // C
 			  (productCounts[3] * 15)+ // D 
 			  (productCounts[4] * 40)+ // E
+			  (productCounts[5] * 10)+ // F
 			  (promotional5CountForA * 200)+ //
 			  (promotional3CountForA * 130)+ //
 			  (nonPromotional3CountForA * 50)+ //

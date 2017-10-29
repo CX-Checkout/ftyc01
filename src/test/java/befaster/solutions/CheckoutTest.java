@@ -58,6 +58,15 @@ public class CheckoutTest {
 			{"AAAAAAAA", 200+130},
 			{"AAAAAAAAA", 200+130+50},
 			
+		// ROUND 3 TESTS
+			{"F", 10},
+			{"f", -1}, 
+			{"FF", 20},
+			{"FFF", 20},
+			{"FFFF", 30},
+			{"AAAFF", 130+20},
+			{"AAFAFFAA", 200+20},
+			
 			{null, -1}
 		});
 	}
