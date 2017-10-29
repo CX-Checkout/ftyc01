@@ -15,34 +15,47 @@ import java.util.stream.Stream;
 
 public class Checkout {
 	
-	static char validProductsArr[] = {'A', 'B', 'C', 'D'};
-	static String validProducts = "ABCD";
+	static String validProducts = "ABCDE";
 	
 	public static int checkout(String sku)
 	{
 		if(sku == null)
 			return -1;
 		
-		if(!sku.isEmpty() && !sku.matches("[ABCD]+"))
+		if(!sku.isEmpty() && !sku.matches("["+validProducts+"]+"))
 			return -1;
 		
 		int sum = 0;
 		
-		int productCounts[] = new int[4];
+		int productCounts[] = new int[validProducts.length()];
 		
 		for(char product : sku.toCharArray())
 		{
 			productCounts[validProducts.indexOf(product)] = productCounts[validProducts	.indexOf(product)]+1; 
 		}
 		
-		int promotionalCountForA = productCounts[0]/3;
-		int nonPromotionalCountForA = productCounts[0]%3;
+		int promotional5CountForA = productCounts[0] / 5;
+		int nonPromotional5CountForA = productCounts[0] % 5;
 		
-		int promotionalCountForB = productCounts[1]/2;
-		int nonPromotionalCountForB = productCounts[1]%2;
+		int promotional3CountForA = nonPromotional5CountForA / 3;
+		int nonPromotional3CountForA = nonPromotional5CountForA % 3;
 		
-		sum = (productCounts[2]*20)+(productCounts[3]*15)+(promotionalCountForA*130)
-				+(nonPromotionalCountForA*50)+(promotionalCountForB*45)+(nonPromotionalCountForB*30);
+		int noOfFreeBs = productCounts[4]/2;
+		
+		// give free Bs from E promotion
+		productCounts[1] = productCounts[1] - noOfFreeBs < 0 ? 0 : productCounts[1] - noOfFreeBs;
+		
+		int promotionalCountForB = productCounts[1] / 2;
+		int nonPromotionalCountForB = productCounts[1] % 2;
+		
+		sum = (productCounts[2] * 20)+ // C
+			  (productCounts[3] * 15)+ // D 
+			  (productCounts[4] * 40)+ // E
+			  (promotional5CountForA * 200)+ //
+			  (promotional3CountForA * 130)+ //
+			  (nonPromotional3CountForA * 50)+ //
+			  (promotionalCountForB * 45)+ //
+			  (nonPromotionalCountForB * 30);
 		
 		return sum;
 	}
