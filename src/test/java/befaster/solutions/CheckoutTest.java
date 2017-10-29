@@ -43,12 +43,12 @@ public class CheckoutTest {
 			{"D", 15},
 			{"DD", 30},
 			{"CAABABABD", 35+130+50+45+30},
-			{"Z", -1},
+			{"1", -1},
 			{"", 0},
 			{"AxA", -1},
 			{"ABCa", -1},
 			
-		// ROUND 2 TESTS
+		// ROUND 2 TESTS: E
 			{"E", 40},
 			{"e", -1}, 
 			{"EE", 80},
@@ -58,7 +58,7 @@ public class CheckoutTest {
 			{"AAAAAAAA", 200+130},
 			{"AAAAAAAAA", 200+130+50},
 			
-		// ROUND 3 TESTS
+		// ROUND 3 TESTS: F
 			{"F", 10},
 			{"f", -1}, 
 			{"FF", 20},
@@ -66,6 +66,30 @@ public class CheckoutTest {
 			{"FFFF", 30},
 			{"AAAFF", 130+20},
 			{"AAFAFFAA", 200+20},
+			
+		// ROUND 4 TESTS A-Z	
+			{"GHIJKLMNOPQRSTUVWXYZ", 20+10+35+60+80+90+15+40+10+50+30+50+30+20+40+50+20+90+10+50},
+			{"HHHHH", 45},
+			{"HHHHHHHHHH", 80},
+			{"HHHHHHHHHHHHHHH", 125},
+			{"HHHHHHHHHHHHHHHH", 135},
+			{"KK", 150},
+			{"KKK", 230},
+			{"NNM", 80+15},
+			{"NNNM", 120},
+			{"PPPPP", 200},
+			{"PPPPPP", 250},
+			{"QQQ", 80},
+			{"QQQQ", 80+30},
+			{"RRR", 50*3},
+			{"RRRQ", 50*3},
+			{"UUU", 40*3},
+			{"UUUU", 40*3},
+			{"VV", 90},
+			{"VVV", 130},
+			{"VVVV", 130+50},
+			{"ABCDEFGHIJKLMNOPQRSTUVWXYZABCDEFGHIJKLMNOPQRSTUVWXYZ", 1880},
+			{"LGCKAQXFOSKZGIWHNRNDITVBUUEOZXPYAVFDEPTBMQLYJRSMJCWH", 1880}, 
 			
 			{null, -1}
 		});

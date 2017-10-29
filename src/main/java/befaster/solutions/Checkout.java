@@ -15,54 +15,84 @@ import java.util.stream.Stream;
 
 public class Checkout {
 	
-	static String validProducts = "ABCDEF";
+	/*static Object validProductsPriceMatric[][] = {
+			{'A', 50}
+	}*/
+	
+	static String validProducts = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+	static int productPrices[] = {
+									50,30,20,15,40,10,20,10,35,60,80,90,15,40,10,50,30,50,30,20,40,50,20,90,10,50
+								};
 	
 	public static int checkout(String sku)
 	{
 		if(sku == null)
 			return -1;
 		
-		if(!sku.isEmpty() && !sku.matches("["+validProducts+"]+"))
+		if(!sku.isEmpty() && !sku.matches("[" + validProducts + "]+"))
 			return -1;
 		
-		int sum = 0;
+		int totalPrice = 0;
 		
 		int productCounts[] = new int[validProducts.length()];
 		
 		for(char product : sku.toCharArray())
 		{
 			productCounts[validProducts.indexOf(product)] = productCounts[validProducts	.indexOf(product)] + 1; 
-		}
-		
-		int promotional5CountForA = productCounts[0] / 5;
-		int nonPromotional5CountForA = productCounts[0] % 5;
-		
-		int promotional3CountForA = nonPromotional5CountForA / 3;
-		int nonPromotional3CountForA = nonPromotional5CountForA % 3;
-		
-		// give free Bs from E promotion
-		int noOfFreeBs = productCounts[4] / 2;
-		productCounts[1] = productCounts[1] - noOfFreeBs < 0 ? 0 : productCounts[1] - noOfFreeBs;
-		
+		}	
 		
 		// give free Fs from F promotion
-		int noOfFreeFs = productCounts[5] / 3;	
-		productCounts[5] = productCounts[5] - noOfFreeFs < 0 ? 0 : productCounts[5] - noOfFreeFs;
+		//int noOfFreeFs = productCounts[5] / 3;	
+		//productCounts[5] = productCounts[5] - noOfFreeFs < 0 ? 0 : productCounts[5] - noOfFreeFs;
+	
 		
-		int promotionalCountForB = productCounts[1] / 2;
-		int nonPromotionalCountForB = productCounts[1] % 2;
 		
-		sum = (productCounts[2] * 20)+ // C
-			  (productCounts[3] * 15)+ // D 
-			  (productCounts[4] * 40)+ // E
-			  (productCounts[5] * 10)+ // F
-			  (promotional5CountForA * 200)+ //
-			  (promotional3CountForA * 130)+ //
-			  (nonPromotional3CountForA * 50)+ //
-			  (promotionalCountForB * 45)+ //
-			  (nonPromotionalCountForB * 30);
+		markProductFreePromotion(productCounts, 'E', 'B', 2);
+		markProductFreePromotion(productCounts, 'F', 'F', 2+1);
+		markProductFreePromotion(productCounts, 'N', 'M', 3);
+		markProductFreePromotion(productCounts, 'R', 'Q', 3);
+		markProductFreePromotion(productCounts, 'U', 'U', 3+1);
 		
-		return sum;
+		totalPrice += calcPriceForPromotion(productCounts, 'A', 5, 200);
+		totalPrice += calcPriceForPromotion(productCounts, 'A', 3, 130);
+		totalPrice += calcPriceForPromotion(productCounts, 'B', 2, 45);
+		totalPrice += calcPriceForPromotion(productCounts, 'P', 5, 200);
+		totalPrice += calcPriceForPromotion(productCounts, 'Q', 3, 80);
+		totalPrice += calcPriceForPromotion(productCounts, 'H', 10, 80);
+		totalPrice += calcPriceForPromotion(productCounts, 'H', 5, 45);
+		totalPrice += calcPriceForPromotion(productCounts, 'K', 2, 150);
+		totalPrice += calcPriceForPromotion(productCounts, 'V', 3, 130);
+		totalPrice += calcPriceForPromotion(productCounts, 'V', 2, 90);
+		
+		totalPrice += sumNonPromotionalProducts(productCounts);
+
+		
+		return totalPrice;
+	}
+
+	private static void markProductFreePromotion(int productCounts[], char srcP, char destP, int srcPCount) {
+		int indexOfSrc = validProducts.indexOf(srcP);
+		int indexOfDest = validProducts.indexOf(destP);
+		int noOfFreeDestProducts = productCounts[indexOfSrc] / srcPCount;	
+		productCounts[indexOfDest] = productCounts[indexOfDest] - noOfFreeDestProducts < 0 ? 0 : productCounts[indexOfDest] - noOfFreeDestProducts;
+	}
+
+	private static int calcPriceForPromotion(int[] productCounts, char product, int promotionalCount, int promotionalPrice) {
+		int indexOfProduct = validProducts.indexOf(product);
+		int nbOfPromotions = productCounts[indexOfProduct] / promotionalCount;
+		productCounts[indexOfProduct] = productCounts[indexOfProduct] % promotionalCount;
+		return nbOfPromotions * promotionalPrice;
+	}
+
+	private static int sumNonPromotionalProducts(int[] productCounts) {
+		int amountSum = 0;
+		int index = 0;
+		for(int productCount : productCounts)
+		{
+			amountSum += productCount * productPrices[index];
+			index++;
+		}
+		return amountSum;
 	}
 
 
